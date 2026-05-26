@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Reloj Digital PWA — Elegante, minimalista e instalable." />
+    <meta name="theme-color" content="#0a0a0a" id="themeColorMeta" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Reloj" />
+
+    <title>Reloj Digital</title>
+
+    <link rel="stylesheet" href="style.css" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="apple-touch-icon" href="icons/icon-192.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png" />
+  </head>
+  <body>
+
+    <!-- Fondo animado con partículas sutiles -->
+    <canvas id="particleCanvas" aria-hidden="true"></canvas>
+
+    <main class="clock-container" role="main">
+
+      <!-- Bloque principal del reloj -->
+      <section class="clock" aria-label="Reloj digital">
+
+        <div class="clock__period" id="period" aria-live="polite">AM</div>
+
+        <time class="clock__time" id="time" datetime="" aria-live="polite" aria-atomic="true">
+          <span class="clock__hm" id="hoursMinutes">12:00</span>
+          <span class="clock__seconds" id="seconds">00</span>
+        </time>
+
+        <div class="clock__date" id="date" aria-live="polite">Lunes, 1 de enero</div>
+
+        <!-- Barra de progreso de segundos -->
+        <div class="clock__progress-bar" aria-hidden="true">
+          <div class="clock__progress-fill" id="progressFill"></div>
+        </div>
+
+      </section>
+    </main>
+
+    <!-- Botón selector de color -->
+    <div class="color-picker-wrapper" role="complementary" aria-label="Selector de color de fondo">
+      <button
+        class="color-btn"
+        id="colorBtn"
+        aria-label="Cambiar color de fondo"
+        title="Cambiar color de fondo"
+        type="button"
+      >
+        <span class="color-btn__ring" id="colorRing"></span>
+        <span class="color-btn__dot" id="colorDot"></span>
+      </button>
+      <input
+        type="color"
+        id="colorPicker"
+        class="color-input"
+        value="#0a0a0a"
+        aria-label="Paleta de colores"
+        tabindex="-1"
+      />
+      <span class="color-label" id="colorLabel">Color</span>
+    </div>
+
+    <!-- Indicador de modo: 12h / 24h -->
+    <button class="format-toggle" id="formatToggle" aria-label="Cambiar formato de hora" title="12h / 24h">
+      <span id="formatLabel">24H</span>
+    </button>
+
+    <script src="app.js"></script>
+
+    <!-- Registro del Service Worker -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker
+            .register('./sw.js')
+            .then(reg => console.log('[SW] Registrado con éxito. Scope:', reg.scope))
+            .catch(err => console.error('[SW] Error al registrar:', err));
+        });
+      }
+    </script>
+  </body>
+</html>
